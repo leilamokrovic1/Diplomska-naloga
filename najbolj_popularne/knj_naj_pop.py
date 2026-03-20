@@ -33,7 +33,7 @@ def save_string_to_file(text, directory, filename):
 
 
 def get_book_links():
-    url = "https://www.goodreads.com/shelf/show/novels"   # najbolj ocenjeni romani
+    url = "https://www.goodreads.com/shelf/show/novels"   # best ever books ocenjeni romani
     html = download_url_to_string(url)
 
     if not html:
@@ -43,8 +43,8 @@ def get_book_links():
     soup = BeautifulSoup(html, "html.parser")
     book_links = []
 
-    # poišče prvih 50 romanov
-    for book in soup.select("a.bookTitle")[:50]:  
+    # poišče prvih 300 romanov
+    for book in soup.select("a.bookTitle")[:300]:  
         link = book.get("href")
         if link and link.startswith("/book/show/"):  #le prave knjige
             book_links.append(base_url + link)
