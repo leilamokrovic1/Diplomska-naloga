@@ -4,7 +4,7 @@ import traceback
 from bs4 import BeautifulSoup
 
 
-knjige_directory = 'knjige_html'
+knjige_directory = 'najboljse_knjige_html'
 base_url = "https://www.goodreads.com"
 
 headers = {
@@ -32,24 +32,40 @@ def save_string_to_file(text, directory, filename):
         file_out.write(text)
 
 
-def get_book_links():
-    url = "https://www.goodreads.com/shelf/show/novels"   # best ever books ocenjeni romani
-    html = download_url_to_string(url)
-
-    if not html:
-        print("Napaka pri prenosu glavne strani.")
-        return []
-
-    soup = BeautifulSoup(html, "html.parser")
+def get_book_links(max_books=300):
     book_links = []
+    page = 1
 
-    # poišče prvih 300 romanov
-    for book in soup.select("a.bookTitle")[:300]:  
-        link = book.get("href")
-        if link and link.startswith("/book/show/"):  #le prave knjige
-            book_links.append(base_url + link)
+    while len(book_links) < max_books:
+        url = f"https://www.goodreads.com/list/show/1.Best_Books_Ever?page={page}"
+        print(f"Obdelujem stran {page}")
 
-    return book_links
+        html = download_url_to_string(url)
+        if not html:
+            print("Napaka pri prenosu strani.")
+            break
+
+        soup = BeautifulSoup(html, "html.parser")
+
+        books_on_page = soup.select("a.bookTitle")
+
+        if not books_on_page:
+            print("Ni več knjig.")
+            break
+
+        for book in books_on_page:
+            link = book.get("href")
+            if link and link.startswith("/book/show/"):
+                full_link = base_url + link
+                if full_link not in book_links:
+                    book_links.append(full_link)
+
+                    if len(book_links) >= max_books:
+                        break
+
+        page += 1
+
+    return book_links[:max_books]
 
 #prenese in shrani knjige
 def download_books():
@@ -58,7 +74,7 @@ def download_books():
     for idx, book_url in enumerate(book_links):
         book_html = download_url_to_string(book_url)
         if book_html:
-            filename = f"knjiga_{idx+1}.html"
+            filename = f"knj_naj_pop_{idx+1}.html"
             save_string_to_file(book_html, knjige_directory, filename)
             print(f" Shranjena knjiga: {filename}")
         else:
