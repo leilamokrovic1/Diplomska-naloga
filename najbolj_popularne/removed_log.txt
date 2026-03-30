@@ -1,0 +1,4 @@
+knjiga_16.txt -> REMOVED: language=es
+knjiga_220.txt -> REMOVED: language=id
+knjiga_236.txt -> REMOVED: language=sl
+knjiga_288.txt -> REMOVED: duplicate
