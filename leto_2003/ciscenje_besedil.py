@@ -9,9 +9,11 @@ log_file = "removed_log.txt"
 os.makedirs(output_dir, exist_ok=True)
 
 def is_mostly_english(text, threshold=0.9):
+    # Najdemo vse besede, ki vsebujejo samo črke
     words = re.findall(r"\b[a-zA-Z]+\b", text)
     if not words:
         return False
+    # Popravljeno: odstranjena odvečna poševnica pred narekovajem
     english_like = sum(1 for w in words if re.match(r"^[a-zA-Z]+$", w))
     return (english_like / len(words)) >= threshold
 
@@ -25,24 +27,33 @@ def normalize(text):
     return " ".join(text.lower().split())
 
 seen = set()
-count = 0
 
 with open(log_file, "w", encoding="utf-8") as log:
     for filename in os.listdir(input_dir):
         if not filename.endswith(".txt"):
             continue
 
+        # Iskanje originalne številke (npr. 'knjiga_38.txt' -> '38')
+        numbers = re.findall(r'\d+', filename)
+        if numbers:
+            original_id = numbers[0]
+        else:
+            original_id = filename.replace(".txt", "")
+
         path = os.path.join(input_dir, filename)
 
-        with open(path, "r", encoding="utf-8") as f:
-            text = f.read().strip()
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                text = f.read().strip()
+        except Exception as e:
+            log.write(f"{filename} -> ERROR reading file: {e}\n")
+            continue
 
         if not text:
             log.write(f"{filename} -> REMOVED: empty\n")
             continue
 
         lang = detect_language(text)
-
         if lang != 'en':
             log.write(f"{filename} -> REMOVED: language={lang}\n")
             continue
@@ -52,20 +63,18 @@ with open(log_file, "w", encoding="utf-8") as log:
             continue
 
         norm = normalize(text)
-
         if norm in seen:
-            log.write(f"{filename} -> REMOVED: duplicate\n")
+            log.write(f"{filename} -> REMOVED: duplicate content\n")
             continue
 
-        seen.add(norm)
+        # Shranjevanje z ohranjenim originalnim ID-jem
+        new_name = f"opis_{original_id}.txt"
+        output_path = os.path.join(output_dir, new_name)
 
-        new_filename = f"opis_{count+1}.txt"
-        new_path = os.path.join(output_dir, new_filename)
-
-        with open(new_path, "w", encoding="utf-8") as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             f.write(text)
 
-        count += 1
+        seen.add(norm)
+        log.write(f"{filename} -> SAVED as {new_name}\n")
 
-print("Število ohranjenih opisov:", count)
-print("Log zapisan v:", log_file)
+print("Preveri 'removed_log.txt' za podrobnosti.")
