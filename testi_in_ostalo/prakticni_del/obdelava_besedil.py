@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 from nltk import pos_tag
 
 
-# tokenization and lemmatization (ločita besede )
+# tokenizacija in lematizacija
 lemmatizer= WordNetLemmatizer()
 
 
@@ -35,8 +35,7 @@ def tokenize_lematize(tekst):
     ]
     
 
-
-# TfidVectorizer odstrani 'stopwords' in ustvari nenegativno matriko
+# CountVectorizer odstrani 'stopwords' in ustvari nenegativno matriko
 
 filepaths = glob.glob(r'C:\Users\mokro\Desktop\diploma\dipl_data\knjige_opisi\*.txt')
 # min_df=2, max_df=0.9 odstranita redke in pogoste besede, to uniči celoten rezultat
