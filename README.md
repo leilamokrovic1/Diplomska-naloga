@@ -16,7 +16,7 @@ Vsebuje kodo za analizo najbolj popularnih knjig kadarkoli (vir: Goodreads Best 
 Vsebuje kodo za analizo knjig, ki so bile izdane leta 2003 (vir: Goodreads Books Published in 2003). Koda vključuje:
 - predprocesiranje podatkov in gradnjo podatkovne matrike,
 - implementacijo algoritma NMF,
-- analizo z NMf in določitev tematik,
+- analizo z NMF in določitev tematik,
 - analizo s PCA in določitev glavnih komponent.
 
 ## Programski jezik in knjižnice
