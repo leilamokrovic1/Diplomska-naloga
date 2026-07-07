@@ -23,5 +23,6 @@ Vsebuje kodo za analizo knjig, ki so bile izdane leta 2003 (vir: Goodreads Books
 Koda je napisana v jeziku ```Python```, najbolj uporabljene knjižnice pa so:
 - ```numpy```,
 - ```pandas```,
+- ```spaCy```,
 - ```scikit-learn```,
 - ```matplotlib```.
