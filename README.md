@@ -5,7 +5,7 @@ V tem repozitoriju je zbrana vsa programska koda, ki je bila razvita za analizo,
 
 ## Struktura map
 
-### '''najbolj_popularne'''
+### ```najbolj_popularne```
 Vsebuje kodo za analizo najbolj popularnih knjig kadarkoli (vir: Goodreads Best Books Ever). Koda vlkjučuje:
 - predprocesiranje podatkov in gradnjo podatkovne matrike,
 - implementacijo algoritma NMF,
